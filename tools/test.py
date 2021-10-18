@@ -17,6 +17,9 @@ from mmseg.apis import multi_gpu_test, single_gpu_test
 from mmseg.datasets import build_dataloader, build_dataset
 from mmseg.models import build_segmentor
 
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2,3"
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -176,7 +179,6 @@ def main():
         mmcv.mkdir_or_exist(tmpdir)
     else:
         tmpdir = None
-
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])
         results = single_gpu_test(
